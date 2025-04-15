@@ -1,0 +1,13 @@
+# فایل‌های سیستمی
+.DS_Store
+Thumbs.db
+
+# محیط‌های توسعه و ادیتورها
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# فایل‌های موقت
+*.log
+*.tmp 

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>گالری هوشمند عکس</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-images"></i>
+                <h1>گالری هوشمند</h1>
+            </div>
+            <div class="header-actions">
+                <div class="user-info">
+                    <span id="username">کاربر مهمان</span>
+                    <span id="user-role" class="role-badge">عادی</span>
+                </div>
+                <div class="theme-toggle">
+                    <button id="theme-toggle-btn">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                <div class="logout">
+                    <button id="logout-btn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        خروج
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="upload-section">
+                <div id="dropzone" class="upload-container">
+                    <input type="file" id="file-input" accept="image/*" multiple hidden>
+                    <button id="upload-btn" class="upload-btn">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        انتخاب عکس
+                    </button>
+                    <div class="upload-text">
+                        <i class="fas fa-image fa-2x"></i>
+                        <p>فایل‌های خود را اینجا رها کنید یا روی دکمه کلیک کنید</p>
+                        <span class="format-hint">فرمت‌های مجاز: JPG، PNG، WEBP</span>
+                    </div>
+                </div>
+                <div id="preview" class="preview-container"></div>
+            </div>
+
+            <div class="gallery-controls">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="جستجو در عکس‌ها...">
+                    <button id="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div class="view-options">
+                    <button id="grid-view-btn" class="view-btn active">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button id="list-view-btn" class="view-btn">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="gallery" class="gallery grid-view"></div>
+            
+            <div id="pagination" class="pagination">
+                <button id="prev-page" disabled>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <span id="page-info">صفحه <span id="current-page">1</span> از <span id="total-pages">1</span></span>
+                <button id="next-page" disabled>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- مودال نمایش عکس -->
+    <div id="image-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img id="modal-image" src="" alt="">
+            <div class="modal-info">
+                <div id="modal-name"></div>
+                <div class="modal-actions">
+                    <button id="edit-name-btn" class="modal-btn">
+                        <i class="fas fa-edit"></i>
+                        تغییر نام
+                    </button>
+                    <button id="download-btn" class="modal-btn">
+                        <i class="fas fa-download"></i>
+                        دانلود
+                    </button>
+                    <button id="delete-btn" class="modal-btn delete-btn">
+                        <i class="fas fa-trash"></i>
+                        حذف
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال تغییر نام عکس -->
+    <div id="rename-modal" class="modal">
+        <div class="modal-content delete-confirm">
+            <h3>تغییر نام عکس</h3>
+            <div class="input-group">
+                <label for="new-filename">نام جدید:</label>
+                <input type="text" id="new-filename" class="form-input">
+            </div>
+            <div class="modal-actions">
+                <button id="save-name-btn" class="modal-btn primary-btn">ذخیره</button>
+                <button id="cancel-rename-btn" class="modal-btn">انصراف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال حذف عکس -->
+    <div id="delete-confirm-modal" class="modal">
+        <div class="modal-content delete-confirm">
+            <h3>آیا از حذف این عکس اطمینان دارید؟</h3>
+            <p>این عملیات غیرقابل بازگشت است.</p>
+            <div class="modal-actions">
+                <button id="confirm-delete-btn" class="modal-btn delete-btn">بله، حذف شود</button>
+                <button id="cancel-delete-btn" class="modal-btn">انصراف</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="auth-message" class="floating-message"></div>
+    <div id="toast" class="toast"></div>
+    <div id="loading" class="loading" style="display: none;">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <footer>
+        <p>گالری هوشمند - ساخته شده با <i class="fas fa-heart"></i></p>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورود به گالری هوشمند</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <i class="fas fa-images"></i>
+                <h1>ورود به گالری هوشمند</h1>
+            </div>
+            
+            <div id="auth-message" class="auth-message"></div>
+            
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label for="email">ایمیل</label>
+                    <input type="email" id="email" name="email" required class="form-input">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">رمز عبور</label>
+                    <div class="password-input">
+                        <input type="password" id="password" name="password" required class="form-input">
+                        <button type="button" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" id="login-submit-btn" class="auth-btn">ورود</button>
+                </div>
+            </form>
+            
+            <div class="auth-links">
+                <p><a href="#" id="forgot-password">رمز عبور خود را فراموش کرده‌اید؟</a></p>
+                <p>حساب کاربری ندارید؟ <a href="register.html">ثبت‌نام کنید</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="reset-password-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>بازیابی رمز عبور</h3>
+            <p>ایمیل خود را وارد کنید تا لینک بازیابی رمز عبور برای شما ارسال شود.</p>
+            <form id="reset-password-form" class="auth-form">
+                <div class="form-group">
+                    <label for="reset-email">ایمیل</label>
+                    <input type="email" id="reset-email" name="reset-email" required class="form-input">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" id="reset-submit-btn" class="auth-btn">ارسال لینک بازیابی</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <div id="loading" class="loading" style="display: none;">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <script src="auth.js"></script>
+    
+    <!-- اسکریپت کمکی برای اطمینان از اجرای رویدادها -->
+    <script>
+        // اطمینان از اتصال رویدادها
+        window.addEventListener('load', function() {
+            console.log('Window loaded - checking login form');
+            const loginForm = document.getElementById('login-form');
+            const loginBtn = document.getElementById('login-submit-btn');
+            
+            if (loginForm && !loginForm._hasSetupEvents) {
+                console.log('Adding extra handler to login form');
+                loginForm._hasSetupEvents = true;
+                
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    console.log('Login form direct submit handler');
+                    const email = document.getElementById('email').value.trim();
+                    const password = document.getElementById('password').value;
+                    
+                    if (window.client && window.handleLogin) {
+                        window.handleLogin(email, password);
+                    } else {
+                        console.error('Auth functions not available!');
+                        alert('خطا در بارگذاری سیستم احراز هویت. لطفاً صفحه را رفرش کنید.');
+                    }
+                });
+                
+                if (loginBtn) {
+                    loginBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('Login button direct click handler');
+                        loginForm.dispatchEvent(new Event('submit'));
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

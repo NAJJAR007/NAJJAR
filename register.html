@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت‌نام در گالری هوشمند</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <i class="fas fa-images"></i>
+                <h1>ثبت‌نام در گالری هوشمند</h1>
+            </div>
+            
+            <div id="auth-message" class="auth-message"></div>
+            
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="fullname">نام و نام خانوادگی</label>
+                    <input type="text" id="fullname" name="fullname" required class="form-input">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">ایمیل</label>
+                    <input type="email" id="email" name="email" required class="form-input">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">رمز عبور</label>
+                    <div class="password-input">
+                        <input type="password" id="password" name="password" required class="form-input">
+                        <button type="button" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm-password">تکرار رمز عبور</label>
+                    <div class="password-input">
+                        <input type="password" id="confirm-password" name="confirm-password" required class="form-input">
+                        <button type="button" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" id="register-submit-btn" class="auth-btn">ثبت‌نام</button>
+                </div>
+            </form>
+            
+            <div class="auth-links">
+                <p>قبلاً ثبت‌نام کرده‌اید؟ <a href="login.html">وارد شوید</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <h3>ثبت‌نام با موفقیت انجام شد</h3>
+            <p>یک ایمیل تأیید به آدرس ایمیل شما ارسال شده است. لطفاً ایمیل خود را بررسی کنید و روی لینک تأیید کلیک کنید.</p>
+            <div class="form-actions">
+                <button id="goto-login" class="auth-btn">ورود به حساب کاربری</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <div id="loading" class="loading" style="display: none;">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <script src="auth.js"></script>
+    
+    <!-- اسکریپت کمکی برای اطمینان از اجرای رویدادها -->
+    <script>
+        // اطمینان از اتصال رویدادها
+        window.addEventListener('load', function() {
+            console.log('Window loaded - checking register form');
+            const registerForm = document.getElementById('register-form');
+            const registerBtn = document.getElementById('register-submit-btn');
+            
+            if (registerForm && !registerForm._hasSetupEvents) {
+                console.log('Adding extra handler to register form');
+                registerForm._hasSetupEvents = true;
+                
+                registerForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    console.log('Register form direct submit handler');
+                    
+                    if (window.client && window.handleRegistration) {
+                        window.handleRegistration();
+                    } else {
+                        console.error('Auth functions not available!');
+                        alert('خطا در بارگذاری سیستم احراز هویت. لطفاً صفحه را رفرش کنید.');
+                    }
+                });
+                
+                if (registerBtn) {
+                    registerBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('Register button direct click handler');
+                        registerForm.dispatchEvent(new Event('submit'));
+                    });
+                }
+            }
+            
+            // اطمینان از عملکرد دکمه رفتن به صفحه ورود
+            const gotoLoginBtn = document.getElementById('goto-login');
+            if (gotoLoginBtn) {
+                gotoLoginBtn.addEventListener('click', function() {
+                    window.location.href = 'login.html';
+                });
+            }
+            
+            // فعال کردن دکمه‌های نمایش/مخفی رمز عبور
+            document.querySelectorAll('.toggle-password').forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.previousElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
